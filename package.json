@@ -1,0 +1,25 @@
+{
+    "author": "sasha@linovsky.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "tides-new",
+    "pebble": {
+        "displayName": "Tides new",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "diorite",
+            "emery"
+        ],
+        "uuid": "06346b74-2890-487c-bc54-4e1a9c48383a",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "1.0.0"
+}
