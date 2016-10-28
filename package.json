@@ -2,11 +2,17 @@
     "author": "sasha@linovsky.com",
     "dependencies": {},
     "keywords": [],
+    "capabilities": ["location"],
     "name": "tides-new",
     "pebble": {
         "displayName": "Tides new",
         "enableMultiJS": true,
-        "messageKeys": [],
+        "messageKeys": [
+            "TEMPERATURE",
+            "CONDITIONS",
+            "WIND_SPEED",
+            "WIND_DIRECTION"
+        ],
         "projectType": "native",
         "resources": {
             "media": [
@@ -16,6 +22,12 @@
 		    "file": "fonts/perfect-dos-vga.ttf",
 		    "compatibility":"2.7"
 		  },
+          {
+          "type": "font",
+          "name": "FONT_PERFECT_DOS_18",
+          "file": "fonts/perfect-dos-vga.ttf",
+          "compatibility":"2.7"
+          },
           {
           "type": "font",
           "name": "FONT_PERFECT_DOS_20",

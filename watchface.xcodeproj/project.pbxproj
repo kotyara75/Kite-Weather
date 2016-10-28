@@ -13,6 +13,7 @@
 
 /* Begin PBXFileReference section */
 		11F7C18E1DC30D370012DB24 /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
+		11FDAB541DC392A8001F9CE1 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = index.js; path = pkjs/index.js; sourceTree = "<group>"; };
 		176AF028BEA240B1BBC23354 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		58A8AD1A09B9403A96634247 /* resources */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = resources; sourceTree = "<group>"; };
 		711A13AA542A412FBD576222 /* main.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = main.c; path = c/main.c; sourceTree = "<group>"; };
@@ -46,6 +47,7 @@
 		D4687DB741E24987A241E3B5 /* sources */ = {
 			isa = PBXGroup;
 			children = (
+				11FDAB541DC392A8001F9CE1 /* index.js */,
 				711A13AA542A412FBD576222 /* main.c */,
 			);
 			name = sources;
