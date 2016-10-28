@@ -1,0 +1,36 @@
+# project  configured on Fri Oct 28 16:36:26 2016 by
+# waf 1.7.11 (abi 98, python 2070af0 on darwin)
+# using /Volumes/Macintosh HD/Users/alexander/Library/Application Support/Pebble SDK/SDKs/current/sdk-core/pebble/waf configure
+#
+----------------------------------------
+Setting top to
+/Volumes/Macintosh HD/Users/alexander/Desktop/Pebble/watchface
+----------------------------------------
+Setting out to
+/Volumes/Macintosh HD/Users/alexander/Desktop/Pebble/watchface/build
+----------------------------------------
+Checking for program webpack
+/Volumes/Macintosh HD/Users/alexander/Library/Application Support/Pebble SDK/SDKs/current/node_modules/.bin/webpack
+find program=['webpack'] paths=['/Volumes/Macintosh HD/Users/alexander/Library/Application Support/Pebble SDK/SDKs/current/node_modules/.bin'] var='WEBPACK' -> '/Volumes/Macintosh HD/Users/alexander/Library/Application Support/Pebble SDK/SDKs/current/node_modules/.bin/webpack'
+----------------------------------------
+Found Pebble SDK for emery in:
+/Volumes/Macintosh HD/Users/alexander/Library/Application Support/Pebble SDK/SDKs/current/sdk-core/pebble/emery
+----------------------------------------
+Checking for program gcc,cc
+arm-none-eabi-gcc
+find program=['gcc', 'cc'] paths='' var='CC' -> 'arm-none-eabi-gcc'
+----------------------------------------
+Checking for program ar
+arm-none-eabi-ar
+find program=['ar'] paths='' var='AR' -> 'arm-none-eabi-ar'
+----------------------------------------
+Found Pebble SDK for diorite in:
+/Volumes/Macintosh HD/Users/alexander/Library/Application Support/Pebble SDK/SDKs/current/sdk-core/pebble/diorite
+----------------------------------------
+Checking for program gcc,cc
+arm-none-eabi-gcc
+find program=['gcc', 'cc'] paths='' var='CC' -> 'arm-none-eabi-gcc'
+----------------------------------------
+Checking for program ar
+arm-none-eabi-ar
+find program=['ar'] paths='' var='AR' -> 'arm-none-eabi-ar'

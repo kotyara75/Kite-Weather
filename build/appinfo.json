@@ -1,0 +1,37 @@
+{
+    "targetPlatforms": [
+        "diorite", 
+        "emery"
+    ], 
+    "projectType": "native", 
+    "name": "tides-new", 
+    "messageKeys": {}, 
+    "companyName": "sasha@linovsky.com", 
+    "enableMultiJS": true, 
+    "versionLabel": "1.0", 
+    "capabilities": [], 
+    "sdkVersion": "3", 
+    "appKeys": {}, 
+    "longName": "Tides new", 
+    "displayName": "Tides new", 
+    "shortName": "Tides new", 
+    "watchapp": {
+        "watchface": true
+    }, 
+    "resources": {
+        "media": [
+            {
+                "type": "font", 
+                "name": "FONT_PERFECT_DOS_48", 
+                "file": "fonts/perfect-dos-vga.ttf", 
+                "compatibility": "2.7"
+            }, 
+            {
+                "type": "bitmap", 
+                "name": "IMAGE_BACKGROUND", 
+                "file": "images/background.png"
+            }
+        ]
+    }, 
+    "uuid": "06346b74-2890-487c-bc54-4e1a9c48383a"
+}

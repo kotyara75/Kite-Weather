@@ -9,7 +9,19 @@
         "messageKeys": [],
         "projectType": "native",
         "resources": {
-            "media": []
+            "media": [
+		  {
+		    "type": "font",
+		    "name": "FONT_PERFECT_DOS_48",
+		    "file": "fonts/perfect-dos-vga.ttf",
+		    "compatibility":"2.7"
+		  },
+          {
+          "type": "bitmap",
+          "name": "IMAGE_BACKGROUND",
+          "file": "images/background.png"
+          }
+		]
         },
         "sdkVersion": "3",
         "targetPlatforms": [
