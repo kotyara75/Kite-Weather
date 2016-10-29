@@ -119,6 +119,17 @@ static void main_window_unload(Window *window) {
     gbitmap_destroy(s_background_bitmap);
 }
 
+static void update_weather(void) {
+    text_layer_set_text(s_wind_layer, "...");
+    // Request weather update by seding message to phone
+    DictionaryIterator *iter;
+    app_message_outbox_begin(&iter);
+    dict_write_uint8(iter, 0, 0);
+    AppMessageResult r = app_message_outbox_send();
+    if(r != APP_MSG_OK)
+        APP_LOG(APP_LOG_LEVEL_ERROR, "Can't send message, error code %d", (int)r);
+}
+
 static void update_time(struct tm *tick_time) {
     // Write the current hours and minutes into a buffer
     static char s_time_buffer[8];
@@ -139,27 +150,26 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     update_time(tick_time);
     // Get weather update every 30 minutes
     if(tick_time->tm_min % WEATHER_UPDATE_INTERVAL == 0) {
-        // Begin dictionary
-        DictionaryIterator *iter;
-        app_message_outbox_begin(&iter);
-        
-        // Add a key-value pair
-        dict_write_uint8(iter, 0, 0);
-        
-        // Send the message
-        app_message_outbox_send();
+        update_weather();
     }
+}
+
+static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
+    update_weather();
 }
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
     // Store incoming information
-    static char temperature_buffer[8];
-    static char conditions_buffer[24];
-    static char weather_layer_buffer[32];
+    static char temperature_buffer[8] = "...";
+    static char conditions_buffer[24] = "...";
+    static char weather_layer_buffer[32] = "";
 
-    static char wind_speed_buffer[4];
-    static char wind_direction_buffer[4];
-    static char wind_layer_buffer[7];
+    static char wind_speed_buffer[4] = "...";
+    static char wind_direction_buffer[4] = "...";
+    static char wind_layer_buffer[7] = "";
+    
+    static time_t last_weather_update_time = 0;
+    static time_t last_wind_update_time = 0;
     
     // Read tuples for data
     Tuple *temp_tuple = dict_find(iterator, MESSAGE_KEY_TEMPERATURE);
@@ -167,59 +177,46 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     Tuple *wind_speed_tuple = dict_find(iterator, MESSAGE_KEY_WIND_SPEED);
     Tuple *wind_direction_tuple = dict_find(iterator, MESSAGE_KEY_WIND_DIRECTION);
     
-    // Display weather
+    // Display WEATHER
     
-    // Temperature string
-    if(temp_tuple)
+    // Temperature
+    if(temp_tuple) {
         snprintf(temperature_buffer, sizeof(temperature_buffer), "%dC", (int)temp_tuple->value->int32);
-    else
-        snprintf(temperature_buffer, sizeof(temperature_buffer), "N/A");
+        last_weather_update_time = time(NULL);
+    }
     
-    // Conditions string
-    if(conditions_tuple)
+    // Conditions
+    if(conditions_tuple) {
         snprintf(conditions_buffer, sizeof(conditions_buffer), "%s", conditions_tuple->value->cstring);
-    else
-        snprintf(conditions_buffer, sizeof(conditions_buffer), "N/A");
+        last_weather_update_time = time(NULL);
+    }
     
-    // Assemble full string and display
+    // Assemble full weather string and display
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s, %s", temperature_buffer, conditions_buffer);
     text_layer_set_text(s_weather_layer, weather_layer_buffer);
     
     
-    // Display wind
+    // Display WIND
     
     // Wind speed string
-    if(wind_speed_tuple)
+    if(wind_speed_tuple) {
         snprintf(wind_speed_buffer, sizeof(wind_speed_buffer), "%d", (int)wind_speed_tuple->value->int32);
-    else
-        snprintf(wind_speed_buffer, sizeof(wind_speed_buffer), "N/A");
-
+        last_wind_update_time = time(NULL);
+    }
+   
     // Wind direction string
-    if(!wind_direction_tuple)
-        snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "N/A");
-    else {
-        int deg = wind_direction_tuple->value->int32;
-        if(deg < 23 || deg > 338)
-            snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "N");
-        else if (deg < 68)
-            snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "NE");
-        else if (deg < 113)
-            snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "E");
-        else if (deg < 158)
-            snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "SE");
-        else if (deg < 203)
-            snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "S");
-        else if (deg < 248)
-            snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "SW");
-        else if (deg < 293)
-            snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "W");
-        else
-            snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "NW");
+    if(wind_direction_tuple) {
+        snprintf(wind_direction_buffer, sizeof(wind_direction_buffer), "%s", wind_direction_tuple->value->cstring);
+        last_wind_update_time = time(NULL);
     }
     
     // Assemble full string and display
-    snprintf(wind_layer_buffer, sizeof(wind_layer_buffer), "%s%s", wind_speed_buffer, wind_direction_buffer);
+    snprintf(wind_layer_buffer, sizeof(wind_layer_buffer), "%s %s", wind_direction_buffer, wind_speed_buffer);
     text_layer_set_text(s_wind_layer, wind_layer_buffer);
+    
+    //TODO: display update times
+    (void)last_wind_update_time;
+    (void)last_weather_update_time;
 }
 
 static void inbox_dropped_callback(AppMessageResult reason, void *context) {
@@ -258,6 +255,9 @@ static void init() {
     // Register with TickTimerService
     tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
     
+    // Register accelerator tap
+    accel_tap_service_subscribe(accel_tap_handler);
+    
     // Register callbacks
     app_message_register_inbox_received(inbox_received_callback);
     app_message_register_inbox_dropped(inbox_dropped_callback);
@@ -271,6 +271,7 @@ static void init() {
 static void deinit() {
     app_message_deregister_callbacks();
     tick_timer_service_unsubscribe();
+    accel_tap_service_unsubscribe();
     
     // Destroy Window
     window_destroy(s_main_window);
