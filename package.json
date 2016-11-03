@@ -38,6 +38,11 @@
           "type": "bitmap",
           "name": "IMAGE_BACKGROUND",
           "file": "images/background.png"
+          },
+          {
+          "type": "bitmap",
+          "name": "IMAGE_BT_ICON",
+          "file": "images/bt-icon.png"
           }
 		]
         },

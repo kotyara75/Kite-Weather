@@ -7,11 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11348D8E1DCB8FC400EECC20 /* battery.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D8C1DCB8FC400EECC20 /* battery.c */; };
+		11348D911DCB97E000EECC20 /* bluetooth.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D8F1DCB97E000EECC20 /* bluetooth.c */; };
 		44C15AB1ADE54CCE91DF3318 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 711A13AA542A412FBD576222 /* main.c */; };
 		A3686B934007476692961EED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 176AF028BEA240B1BBC23354 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11348D8C1DCB8FC400EECC20 /* battery.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = battery.c; path = c/battery.c; sourceTree = "<group>"; };
+		11348D8D1DCB8FC400EECC20 /* battery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = battery.h; path = c/battery.h; sourceTree = "<group>"; };
+		11348D8F1DCB97E000EECC20 /* bluetooth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bluetooth.c; path = c/bluetooth.c; sourceTree = "<group>"; };
+		11348D901DCB97E000EECC20 /* bluetooth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bluetooth.h; path = c/bluetooth.h; sourceTree = "<group>"; };
 		11F7C18E1DC30D370012DB24 /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		11FDAB541DC392A8001F9CE1 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = index.js; path = pkjs/index.js; sourceTree = "<group>"; };
 		176AF028BEA240B1BBC23354 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -49,6 +55,10 @@
 			children = (
 				11FDAB541DC392A8001F9CE1 /* index.js */,
 				711A13AA542A412FBD576222 /* main.c */,
+				11348D8C1DCB8FC400EECC20 /* battery.c */,
+				11348D8D1DCB8FC400EECC20 /* battery.h */,
+				11348D8F1DCB97E000EECC20 /* bluetooth.c */,
+				11348D901DCB97E000EECC20 /* bluetooth.h */,
 			);
 			name = sources;
 			path = src;
@@ -129,6 +139,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				44C15AB1ADE54CCE91DF3318 /* main.c in Sources */,
+				11348D911DCB97E000EECC20 /* bluetooth.c in Sources */,
+				11348D8E1DCB8FC400EECC20 /* battery.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

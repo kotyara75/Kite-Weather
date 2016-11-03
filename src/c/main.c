@@ -1,4 +1,6 @@
 #include <pebble.h>
+#include "battery.h"
+#include "bluetooth.h"
 
 static Window *s_main_window;
 
@@ -87,7 +89,7 @@ static void main_window_load(Window *window) {
 
     // Create Wind Layer
     s_wind_layer = text_layer_create(
-                                        GRect(0, WIND_LAYER_Y, bounds.size.w, WIND_LAYER_SIZE));
+                                        GRect(0, WIND_LAYER_Y, bounds.size.w-30, WIND_LAYER_SIZE));
     // Style the text
     text_layer_set_background_color(s_wind_layer, GColorClear);
     text_layer_set_text_color(s_wind_layer, GColorWhite);
@@ -97,6 +99,9 @@ static void main_window_load(Window *window) {
     s_wind_font = fonts_load_custom_font(resource_get_handle(WIND_FONT_RESOURCE_ID));
     text_layer_set_font(s_wind_layer, s_wind_font);
     layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_wind_layer));
+    
+    battery_load(window);
+    bluetooth_load(window);
 
 }
 
@@ -117,6 +122,9 @@ static void main_window_unload(Window *window) {
     
     // Destroy GBitmap
     gbitmap_destroy(s_background_bitmap);
+    
+    battery_unload(window);
+    bluetooth_unload(window);
 }
 
 static void update_weather(void) {
@@ -258,6 +266,12 @@ static void init() {
     // Register accelerator tap
     accel_tap_service_subscribe(accel_tap_handler);
     
+    // Init battery gauge
+    battery_init();
+    
+    // Init bluetooth icon
+    bluetooth_init();
+    
     // Register callbacks
     app_message_register_inbox_received(inbox_received_callback);
     app_message_register_inbox_dropped(inbox_dropped_callback);
@@ -272,6 +286,9 @@ static void deinit() {
     app_message_deregister_callbacks();
     tick_timer_service_unsubscribe();
     accel_tap_service_unsubscribe();
+    
+    battery_deinit();
+    bluetooth_deinit();
     
     // Destroy Window
     window_destroy(s_main_window);
