@@ -2,19 +2,19 @@
 #include "battery.h"
 #include "bluetooth.h"
 
-static Window *s_main_window;
+static Window *s_main_window = NULL;
 
-static GBitmap *s_background_bitmap;
-static BitmapLayer *s_background_layer;
+static GBitmap *s_background_bitmap = NULL;
+static BitmapLayer *s_background_layer = NULL;
 
-static GFont s_time_font;
-static GFont s_weather_font;
-static GFont s_wind_font;
+static GFont s_time_font = NULL;
+static GFont s_weather_font = NULL;
+static GFont s_wind_font = NULL;
 
-static TextLayer *s_time_layer;
-static TextLayer *s_date_layer;
-static TextLayer *s_weather_layer;
-static TextLayer *s_wind_layer;
+static TextLayer *s_time_layer = NULL;
+static TextLayer *s_date_layer = NULL;
+static TextLayer *s_weather_layer = NULL;
+static TextLayer *s_wind_layer = NULL;
 
 #define WEATHER_UPDATE_INTERVAL 30 //minutes
 
@@ -107,21 +107,21 @@ static void main_window_load(Window *window) {
 
 static void main_window_unload(Window *window) {
     // Destroy TextLayers
-    text_layer_destroy(s_wind_layer);
-    text_layer_destroy(s_weather_layer);
-    text_layer_destroy(s_date_layer);
-    text_layer_destroy(s_time_layer);
+    text_layer_destroy(s_wind_layer); s_wind_layer = NULL;
+    text_layer_destroy(s_weather_layer); s_weather_layer = NULL;
+    text_layer_destroy(s_date_layer); s_date_layer = NULL;
+    text_layer_destroy(s_time_layer); s_time_layer = NULL;
     
     // Unload GFont
-    fonts_unload_custom_font(s_wind_font);
-    fonts_unload_custom_font(s_weather_font);
-    fonts_unload_custom_font(s_time_font);
+    fonts_unload_custom_font(s_wind_font); s_wind_font = NULL;
+    fonts_unload_custom_font(s_weather_font); s_weather_font = NULL;
+    fonts_unload_custom_font(s_time_font); s_time_font = NULL;
     
     // Destroy BitmapLayer
-    bitmap_layer_destroy(s_background_layer);
+    bitmap_layer_destroy(s_background_layer); s_background_layer = NULL;
     
     // Destroy GBitmap
-    gbitmap_destroy(s_background_bitmap);
+    gbitmap_destroy(s_background_bitmap); s_background_bitmap = NULL;
     
     battery_unload(window);
     bluetooth_unload(window);
@@ -291,7 +291,7 @@ static void deinit() {
     bluetooth_deinit();
     
     // Destroy Window
-    window_destroy(s_main_window);
+    window_destroy(s_main_window); s_main_window = NULL;
 }
 
 int main(void) {

@@ -58,5 +58,5 @@ void battery_load(Window *window) {
 }
 
 void battery_unload(Window *window) {
-    layer_destroy(s_battery_layer);
+    layer_destroy(s_battery_layer); s_battery_layer = NULL;
 }

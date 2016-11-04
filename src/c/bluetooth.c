@@ -33,8 +33,7 @@ void bluetooth_init(void) {
 }
 
 void bluetooth_deinit(void) {
-    gbitmap_destroy(s_bt_icon_bitmap);
-    bitmap_layer_destroy(s_bt_icon_layer);
+    connection_service_unsubscribe();
 }
 
 void bluetooth_load(Window *window) {
@@ -51,6 +50,6 @@ void bluetooth_load(Window *window) {
 }
 
 void bluetooth_unload(Window *window) {
-    gbitmap_destroy(s_bt_icon_bitmap);
-    bitmap_layer_destroy(s_bt_icon_layer);
+    gbitmap_destroy(s_bt_icon_bitmap); s_bt_icon_bitmap = NULL;
+    bitmap_layer_destroy(s_bt_icon_layer); s_bt_icon_layer = NULL;
 }
