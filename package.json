@@ -18,7 +18,7 @@
             "media": [
 		  {
 		    "type": "font",
-		    "name": "FONT_PERFECT_DOS_48",
+		    "name": "FONT_PERFECT_DOS_42",
 		    "file": "fonts/perfect-dos-vga.ttf",
 		    "compatibility":"2.7"
 		  },
@@ -43,6 +43,11 @@
           "type": "bitmap",
           "name": "IMAGE_BT_ICON",
           "file": "images/bt-icon.png"
+          },
+          {
+          "type": "png",
+          "name": "IMAGE_PH_BAY",
+          "file": "images/port-phillip-bay.pbl.png"
           }
 		]
         },

@@ -8,8 +8,8 @@
 
 #include "bluetooth.h"
 
-static BitmapLayer *s_background_layer, *s_bt_icon_layer = NULL;
-static GBitmap *s_background_bitmap, *s_bt_icon_bitmap = NULL;
+static BitmapLayer *s_bt_icon_layer = NULL;
+static GBitmap *s_bt_icon_bitmap = NULL;
 
 static void bluetooth_callback(bool connected) {
     // Show icon if disconnected
@@ -27,7 +27,7 @@ void bluetooth_init(void) {
     connection_service_subscribe((ConnectionHandlers) {
         .pebble_app_connection_handler = bluetooth_callback
     });
-    
+
     // Show the correct state of the BT connection from the start
     bluetooth_callback(connection_service_peek_pebble_app_connection());
 }
@@ -36,17 +36,19 @@ void bluetooth_deinit(void) {
     connection_service_unsubscribe();
 }
 
-void bluetooth_load(Window *window) {
+void bluetooth_load(Layer *parent_layer) {
     // Create the Bluetooth icon GBitmap
     s_bt_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BT_ICON);
+    GRect ib = gbitmap_get_bounds(s_bt_icon_bitmap);
     
-    Layer *window_layer = window_get_root_layer(window);
-    GRect bounds = layer_get_bounds(window_layer);
+    GRect pb = layer_get_bounds(parent_layer);
+    
+    GRect layer_bounds = GRect(pb.size.w - ib.size.w, 0, ib.size.w, ib.size.h);
     
     // Create the BitmapLayer to display the GBitmap
-    s_bt_icon_layer = bitmap_layer_create(GRect(bounds.origin.x+bounds.size.w-30, 12, 30, 30));
+    s_bt_icon_layer = bitmap_layer_create(layer_bounds);
     bitmap_layer_set_bitmap(s_bt_icon_layer, s_bt_icon_bitmap);
-    layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_bt_icon_layer));
+    layer_add_child(parent_layer, bitmap_layer_get_layer(s_bt_icon_layer));
 }
 
 void bluetooth_unload(Window *window) {

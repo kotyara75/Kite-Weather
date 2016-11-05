@@ -13,7 +13,7 @@
 
 void bluetooth_init(void);
 void bluetooth_deinit(void);
-void bluetooth_load(Window *window);
+void bluetooth_load(Layer *parent_layer);
 void bluetooth_unload(Window *window);
 
 #endif /* bluetooth_h */

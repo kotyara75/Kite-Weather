@@ -13,7 +13,7 @@
 
 void battery_init(void);
 void battery_deinit(void);
-void battery_load(Window *window);
+void battery_load(Layer *parent_layer);
 void battery_unload(Window *window);
 
 #endif /* battery_h */

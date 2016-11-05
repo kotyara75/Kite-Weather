@@ -1,128 +1,80 @@
 #include <pebble.h>
 #include "battery.h"
 #include "bluetooth.h"
+#include "ph_bay.h"
+#include "time.h"
 
 static Window *s_main_window = NULL;
 
-static GBitmap *s_background_bitmap = NULL;
-static BitmapLayer *s_background_layer = NULL;
-
-static GFont s_time_font = NULL;
 static GFont s_weather_font = NULL;
 static GFont s_wind_font = NULL;
 
-static TextLayer *s_time_layer = NULL;
-static TextLayer *s_date_layer = NULL;
 static TextLayer *s_weather_layer = NULL;
 static TextLayer *s_wind_layer = NULL;
 
 #define WEATHER_UPDATE_INTERVAL 30 //minutes
 
-#define TIME_LAYER_SIZE 50
-#define DATE_FONT FONT_KEY_GOTHIC_14
-#define DATE_LAYER_SIZE 15
-#define TIME_LAYER_Y PBL_IF_ROUND_ELSE(58, 52)
-
-#define WEATHER_LAYER_Y PBL_IF_ROUND_ELSE(125, 120)
+#define WEATHER_LAYER_Y 1
 #define WEATHER_FONT_RESOURCE_ID RESOURCE_ID_FONT_PERFECT_DOS_20
-#define WEATHER_LAYER_SIZE 25
+#define WEATHER_LAYER_SIZE 21
+#define WEATER_LAYER_SHIFT 5
 
 #define WIND_FONT_RESOURCE_ID RESOURCE_ID_FONT_PERFECT_DOS_20
-#define WIND_LAYER_Y PBL_IF_ROUND_ELSE(26, 20)
-#define WIND_LAYER_SIZE 25
+#define WIND_LAYER_Y WEATHER_LAYER_Y + WEATHER_LAYER_SIZE
+#define WIND_LAYER_SIZE 20
+#define WIND_LAYER_SHIFT 45
 
 static void main_window_load(Window *window) {
     // Get information about the Window
     Layer *window_layer = window_get_root_layer(window);
-    GRect bounds = layer_get_bounds(window_layer);
     
-    // Create GBitmap
-    s_background_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BACKGROUND);
+    Layer* ph_bay_layer = ph_bay_load(window_layer);
+    Layer* time_layer = time_load(window_layer);
     
-    // Create BitmapLayer to display the GBitmap
-    s_background_layer = bitmap_layer_create(bounds);
-    
-    // Set the bitmap onto the layer and add to the window
-    bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
-    layer_add_child(window_layer, bitmap_layer_get_layer(s_background_layer));
-    
-    // Create GFont
-    s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_PERFECT_DOS_48));
-    
-    // Create the TextLayer with specific bounds
-    s_time_layer = text_layer_create(
-                                     GRect(0, TIME_LAYER_Y, bounds.size.w, TIME_LAYER_SIZE));
-    
-    // Improve the layout to be more like a watchface
-    text_layer_set_background_color(s_time_layer, GColorClear);
-    text_layer_set_text_color(s_time_layer, GColorBlack);
-    text_layer_set_font(s_time_layer, s_time_font);
-    text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
-    
-    // Add it as a child layer to the Window's root layer
-    layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
-    
-    // Create the TextLayer to display date
-    s_date_layer = text_layer_create(
-                                     GRect(0, bounds.size.h - DATE_LAYER_SIZE, bounds.size.w, DATE_LAYER_SIZE));
-    // Improve the layout to be more like a watchface
-    text_layer_set_background_color(s_date_layer, GColorClear);
-    text_layer_set_text_color(s_date_layer, GColorWhite);
-    text_layer_set_font(s_date_layer, fonts_get_system_font(DATE_FONT));
-    text_layer_set_text_alignment(s_date_layer, GTextAlignmentRight);
-    
-    // Add it as a child layer to the Window's root layer
-    layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
+    GRect ph_bounds = layer_get_bounds(ph_bay_layer);
+    GPoint center = grect_center_point(&ph_bounds);
+    GRect weather_bounds = GRect(WEATER_LAYER_SHIFT, WEATHER_LAYER_Y, ph_bounds.size.w-WEATER_LAYER_SHIFT, WEATHER_LAYER_SIZE);
+    GRect wind_bounds = GRect(WIND_LAYER_SHIFT, center.y - WIND_LAYER_SIZE / 2, ph_bounds.size.w-WIND_LAYER_SHIFT, WIND_LAYER_SIZE);
     
     // Create temperature Layer
-    s_weather_layer = text_layer_create(
-                                        GRect(0, WEATHER_LAYER_Y, bounds.size.w, WEATHER_LAYER_SIZE));
+    s_weather_layer = text_layer_create(weather_bounds);
     // Style the text
     text_layer_set_background_color(s_weather_layer, GColorClear);
-    text_layer_set_text_color(s_weather_layer, GColorWhite);
-    text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
+    text_layer_set_text_color(s_weather_layer, GColorBlack);
+    text_layer_set_text_alignment(s_weather_layer, GTextAlignmentLeft);
     text_layer_set_text(s_weather_layer, "Loading...");
     // Create second custom font, apply it and add to Window
     s_weather_font = fonts_load_custom_font(resource_get_handle(WEATHER_FONT_RESOURCE_ID));
     text_layer_set_font(s_weather_layer, s_weather_font);
-    layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_weather_layer));
+    layer_add_child(ph_bay_layer, text_layer_get_layer(s_weather_layer));
 
     // Create Wind Layer
-    s_wind_layer = text_layer_create(
-                                        GRect(0, WIND_LAYER_Y, bounds.size.w-30, WIND_LAYER_SIZE));
+    s_wind_layer = text_layer_create(wind_bounds);
     // Style the text
     text_layer_set_background_color(s_wind_layer, GColorClear);
-    text_layer_set_text_color(s_wind_layer, GColorWhite);
+    text_layer_set_text_color(s_wind_layer, GColorBlack);
     text_layer_set_text_alignment(s_wind_layer, GTextAlignmentCenter);
     text_layer_set_text(s_wind_layer, "Loading...");
     // Create second custom font, apply it and add to Window
     s_wind_font = fonts_load_custom_font(resource_get_handle(WIND_FONT_RESOURCE_ID));
     text_layer_set_font(s_wind_layer, s_wind_font);
-    layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_wind_layer));
+    layer_add_child(ph_bay_layer, text_layer_get_layer(s_wind_layer));
     
-    battery_load(window);
-    bluetooth_load(window);
-
+    battery_load(time_layer);
+    bluetooth_load(ph_bay_layer);
 }
 
 static void main_window_unload(Window *window) {
     // Destroy TextLayers
     text_layer_destroy(s_wind_layer); s_wind_layer = NULL;
     text_layer_destroy(s_weather_layer); s_weather_layer = NULL;
-    text_layer_destroy(s_date_layer); s_date_layer = NULL;
-    text_layer_destroy(s_time_layer); s_time_layer = NULL;
-    
+
     // Unload GFont
     fonts_unload_custom_font(s_wind_font); s_wind_font = NULL;
     fonts_unload_custom_font(s_weather_font); s_weather_font = NULL;
-    fonts_unload_custom_font(s_time_font); s_time_font = NULL;
     
-    // Destroy BitmapLayer
-    bitmap_layer_destroy(s_background_layer); s_background_layer = NULL;
-    
-    // Destroy GBitmap
-    gbitmap_destroy(s_background_bitmap); s_background_bitmap = NULL;
-    
+    time_unload(window);
+    ph_bay_unload(window);
     battery_unload(window);
     bluetooth_unload(window);
 }
@@ -136,22 +88,6 @@ static void update_weather(void) {
     AppMessageResult r = app_message_outbox_send();
     if(r != APP_MSG_OK)
         APP_LOG(APP_LOG_LEVEL_ERROR, "Can't send message, error code %d", (int)r);
-}
-
-static void update_time(struct tm *tick_time) {
-    // Write the current hours and minutes into a buffer
-    static char s_time_buffer[8];
-    strftime(s_time_buffer, sizeof(s_time_buffer), clock_is_24h_style() ?
-             "%H:%M" : "%I:%M", tick_time);
-    
-    // Display this time on the TextLayer
-    text_layer_set_text(s_time_layer, s_time_buffer);
-    
-    static char s_date_buffer[16];
-    strftime(s_date_buffer, sizeof(s_date_buffer), "%a %d %b %Y", tick_time);
-
-    // Display date on the TextLayer
-    text_layer_set_text(s_date_layer, s_date_buffer);
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
@@ -200,7 +136,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     }
     
     // Assemble full weather string and display
-    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s, %s", temperature_buffer, conditions_buffer);
+    snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s %s", temperature_buffer, conditions_buffer);
     text_layer_set_text(s_weather_layer, weather_layer_buffer);
     
     
@@ -219,7 +155,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     }
     
     // Assemble full string and display
-    snprintf(wind_layer_buffer, sizeof(wind_layer_buffer), "%s %s", wind_direction_buffer, wind_speed_buffer);
+    snprintf(wind_layer_buffer, sizeof(wind_layer_buffer), "%s%s", wind_direction_buffer, wind_speed_buffer);
     text_layer_set_text(s_wind_layer, wind_layer_buffer);
     
     //TODO: display update times
@@ -255,10 +191,7 @@ static void init() {
     // Show the Window on the watch, with animated=true
     window_stack_push(s_main_window, true);
     
-    // Make sure the time is displayed from the start
-    time_t temp = time(NULL);
-    struct tm *tick_time = localtime(&temp);
-    update_time(tick_time);
+    time_init();
     
     // Register with TickTimerService
     tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
@@ -266,10 +199,8 @@ static void init() {
     // Register accelerator tap
     accel_tap_service_subscribe(accel_tap_handler);
     
-    // Init battery gauge
+    ph_bay_init();
     battery_init();
-    
-    // Init bluetooth icon
     bluetooth_init();
     
     // Register callbacks
@@ -287,6 +218,8 @@ static void deinit() {
     tick_timer_service_unsubscribe();
     accel_tap_service_unsubscribe();
     
+    time_deinit();
+    ph_bay_deinit();
     battery_deinit();
     bluetooth_deinit();
     
