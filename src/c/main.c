@@ -4,6 +4,10 @@
 #include "ph_bay.h"
 #include "time.h"
 
+
+bool comm_is_js_ready(void);
+void weather_update(void);
+
 static Window *s_main_window = NULL;
 
 static GFont s_weather_font = NULL;
@@ -79,27 +83,54 @@ static void main_window_unload(Window *window) {
     bluetooth_unload(window);
 }
 
-static void update_weather(void) {
+static void weather_update_timout_handler(void *context) {
+    // Retry the update request
+    weather_update();
+}
+
+static AppTimer *s_update_timeout_timer = 0;
+
+void weather_update(void) {
     text_layer_set_text(s_wind_layer, "...");
-    // Request weather update by seding message to phone
-    DictionaryIterator *iter;
-    app_message_outbox_begin(&iter);
-    dict_write_uint8(iter, 0, 0);
-    AppMessageResult r = app_message_outbox_send();
-    if(r != APP_MSG_OK)
-        APP_LOG(APP_LOG_LEVEL_ERROR, "Can't send message, error code %d", (int)r);
+    
+    if (!comm_is_js_ready()) {
+        // do nothing, timeout timer below will do the job
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "JS part is not ready to recieve messages, weather update is postponed");
+    } else {
+        // Request weather update by seding message to phone
+        DictionaryIterator *iter = 0;
+        AppMessageResult result = app_message_outbox_begin(&iter);
+        if(result == APP_MSG_OK) {
+            // send the message requesting weather update
+            dict_write_uint8(iter, 0, 0);
+            result = app_message_outbox_send();
+            if(result != APP_MSG_OK)
+                APP_LOG(APP_LOG_LEVEL_ERROR, "Error sending the outbox: %d", (int)result);
+        } else
+            // The outbox cannot be used right now, do nothing, timeour timer will do the job
+            APP_LOG(APP_LOG_LEVEL_ERROR, "Error preparing the outbox: %d", (int)result);
+    }
+    
+    // Schedule the timeout timer
+    const int interval_ms = 1000;
+    s_update_timeout_timer = app_timer_register(interval_ms, weather_update_timout_handler, NULL);
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     update_time(tick_time);
     // Get weather update every 30 minutes
-    if(tick_time->tm_min % WEATHER_UPDATE_INTERVAL == 0) {
-        update_weather();
+    if((tick_time->tm_min % WEATHER_UPDATE_INTERVAL == 0)) {
+        weather_update();
     }
 }
 
 static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
-    update_weather();
+    weather_update();
+}
+
+static bool s_js_ready = false;
+bool comm_is_js_ready() {
+    return s_js_ready;
 }
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
@@ -114,6 +145,12 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     
     static time_t last_weather_update_time = 0;
     static time_t last_wind_update_time = 0;
+    
+    Tuple *ready_tuple = dict_find(iterator, MESSAGE_KEY_JSReady);
+    if(ready_tuple) {
+        // PebbleKit JS is ready! Now it's safe to send messages
+        s_js_ready = true;
+    }
     
     // Read tuples for data
     Tuple *temp_tuple = dict_find(iterator, MESSAGE_KEY_TEMPERATURE);
@@ -164,15 +201,27 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 }
 
 static void inbox_dropped_callback(AppMessageResult reason, void *context) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Inbox Message dropped!");
+    APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped. Reason: %d", (int)reason);
 }
 
 static void outbox_failed_callback(DictionaryIterator *iterator, AppMessageResult reason, void *context) {
-    APP_LOG(APP_LOG_LEVEL_ERROR, "Outbox send failed!");
+    APP_LOG(APP_LOG_LEVEL_INFO, "Message send failed. Reason: %d, retrying", (int)reason);
+    
+    // Message failed before timer elapsed, reschedule for later
+    if(s_update_timeout_timer) {
+        app_timer_cancel(s_update_timeout_timer);
+        s_update_timeout_timer = NULL;
+    }
+    
+    // Use the timeout handler to perform the same action - resend the message
+    const int retry_interval_ms = 500;
+    s_update_timeout_timer = app_timer_register(retry_interval_ms, weather_update_timout_handler, NULL);
 }
 
 static void outbox_sent_callback(DictionaryIterator *iterator, void *context) {
-    APP_LOG(APP_LOG_LEVEL_INFO, "Outbox sent successfully.");
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Outbox sent successfully, cancel timer");
+    // Successful message, the timeout is not needed anymore for this message
+    app_timer_cancel(s_update_timeout_timer);
 }
 
 static void init() {

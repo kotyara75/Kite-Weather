@@ -118,6 +118,9 @@ function updateWeather() {
 Pebble.addEventListener('ready', 
     function(e) {
         console.log('PebbleKit JS ready.');
+        
+        // Update s_js_ready on watch
+        Pebble.sendAppMessage({'JSReady': 1});
 
         // Get the initial weather
         updateWeather();

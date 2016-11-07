@@ -8,6 +8,7 @@
         "displayName": "Tides new",
         "enableMultiJS": true,
         "messageKeys": [
+            "JSReady",
             "TEMPERATURE",
             "CONDITIONS",
             "WIND_SPEED",
