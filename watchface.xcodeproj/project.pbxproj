@@ -24,6 +24,7 @@
 		11348D931DCDF82800EECC20 /* ph_bay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ph_bay.h; path = c/ph_bay.h; sourceTree = "<group>"; };
 		11348D951DCE1C0900EECC20 /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = time.c; path = c/time.c; sourceTree = "<group>"; };
 		11348D961DCE1C0900EECC20 /* time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = time.h; path = c/time.h; sourceTree = "<group>"; };
+		11348D981DD06E0800EECC20 /* compassPoints.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = compassPoints.js; path = pkjs/compassPoints.js; sourceTree = "<group>"; };
 		11F7C18E1DC30D370012DB24 /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		11FDAB541DC392A8001F9CE1 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = index.js; path = pkjs/index.js; sourceTree = "<group>"; };
 		176AF028BEA240B1BBC23354 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -60,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				11FDAB541DC392A8001F9CE1 /* index.js */,
+				11348D981DD06E0800EECC20 /* compassPoints.js */,
 				711A13AA542A412FBD576222 /* main.c */,
 				11348D951DCE1C0900EECC20 /* time.c */,
 				11348D961DCE1C0900EECC20 /* time.h */,

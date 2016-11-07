@@ -1,3 +1,5 @@
+var compassPoints = require('./compassPoints');
+
 var OpenWeatherMapsAPIKey = "4de2ed41f0012eda52964daee1a58d70";
 var FawknerBeaconURL = "http://reg.bom.gov.au/fwo/IDV60901/IDV60901.95872.json";
 //var WindSource = 'OWM';
@@ -13,17 +15,6 @@ var xhrRequest = function (url, type, callback) {
     xhr.open(type, url);
     xhr.send();
 };
-
-function convertWindDeg(deg) {
-    if(deg < 23 || deg > 338) return "N"
-        else if (deg < 68) return "NE"
-        else if (deg < 113) return "E"
-        else if (deg < 158) return "SE"
-        else if (deg < 203) return "S"
-        else if (deg < 248) return "SW"
-        else if (deg < 293) return "W"
-            else return "NW";
-}
 
 function messageFailedCallback(e) {
     console.log('Error sending info to Pebble!');
@@ -58,7 +49,7 @@ function updateWeatherFromOWM(pos) {
                    if(WindSource == 'OWM') {
                         // Get wind data and send to Pebble
                         var wind_speed = Math.round(json.wind.speed * 1.943844);
-                        var wind_direction = convertWindDeg(Math.round(json.wind.deg));
+                        var wind_direction = compassPoints.azimuthToAbbreviation(json.wind.deg);
                         console.log('Wind direction converted ' + json.wind.deg + ' to ' + wind_direction);
                
                         dictionary = {
