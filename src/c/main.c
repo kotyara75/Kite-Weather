@@ -85,6 +85,7 @@ static void main_window_unload(Window *window) {
 
 static void weather_update_timout_handler(void *context) {
     // Retry the update request
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Message send timeout, retrying...");
     weather_update();
 }
 
