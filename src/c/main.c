@@ -28,6 +28,7 @@ static TextLayer *s_wind_layer = NULL;
 #define WIND_LAYER_SIZE 20
 #define WIND_LAYER_SHIFT 45
 
+
 static void main_window_load(Window *window) {
     // Get information about the Window
     Layer *window_layer = window_get_root_layer(window);
@@ -258,7 +259,8 @@ static void init() {
     app_message_register_inbox_dropped(inbox_dropped_callback);
     app_message_register_outbox_failed(outbox_failed_callback);
     app_message_register_outbox_sent(outbox_sent_callback);
-    
+ 
+
     // Open AppMessage
     app_message_open(APP_MESSAGE_INBOX_SIZE_MINIMUM, APP_MESSAGE_OUTBOX_SIZE_MINIMUM);
 }

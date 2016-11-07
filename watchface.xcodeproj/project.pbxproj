@@ -11,6 +11,7 @@
 		11348D911DCB97E000EECC20 /* bluetooth.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D8F1DCB97E000EECC20 /* bluetooth.c */; };
 		11348D941DCDF82800EECC20 /* ph_bay.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D921DCDF82800EECC20 /* ph_bay.c */; };
 		11348D971DCE1C0900EECC20 /* time.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D951DCE1C0900EECC20 /* time.c */; };
+		11348D9B1DD0DED800EECC20 /* app_sync.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D991DD0DED800EECC20 /* app_sync.c */; };
 		44C15AB1ADE54CCE91DF3318 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 711A13AA542A412FBD576222 /* main.c */; };
 		A3686B934007476692961EED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 176AF028BEA240B1BBC23354 /* Foundation.framework */; };
 /* End PBXBuildFile section */
@@ -25,6 +26,8 @@
 		11348D951DCE1C0900EECC20 /* time.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = time.c; path = c/time.c; sourceTree = "<group>"; };
 		11348D961DCE1C0900EECC20 /* time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = time.h; path = c/time.h; sourceTree = "<group>"; };
 		11348D981DD06E0800EECC20 /* compassPoints.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = compassPoints.js; path = pkjs/compassPoints.js; sourceTree = "<group>"; };
+		11348D991DD0DED800EECC20 /* app_sync.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = app_sync.c; path = c/app_sync.c; sourceTree = "<group>"; };
+		11348D9A1DD0DED800EECC20 /* app_sync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = app_sync.h; path = c/app_sync.h; sourceTree = "<group>"; };
 		11F7C18E1DC30D370012DB24 /* package.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = package.json; sourceTree = "<group>"; };
 		11FDAB541DC392A8001F9CE1 /* index.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = index.js; path = pkjs/index.js; sourceTree = "<group>"; };
 		176AF028BEA240B1BBC23354 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -63,6 +66,8 @@
 				11FDAB541DC392A8001F9CE1 /* index.js */,
 				11348D981DD06E0800EECC20 /* compassPoints.js */,
 				711A13AA542A412FBD576222 /* main.c */,
+				11348D991DD0DED800EECC20 /* app_sync.c */,
+				11348D9A1DD0DED800EECC20 /* app_sync.h */,
 				11348D951DCE1C0900EECC20 /* time.c */,
 				11348D961DCE1C0900EECC20 /* time.h */,
 				11348D921DCDF82800EECC20 /* ph_bay.c */,
@@ -152,6 +157,7 @@
 			files = (
 				11348D971DCE1C0900EECC20 /* time.c in Sources */,
 				11348D941DCDF82800EECC20 /* ph_bay.c in Sources */,
+				11348D9B1DD0DED800EECC20 /* app_sync.c in Sources */,
 				44C15AB1ADE54CCE91DF3318 /* main.c in Sources */,
 				11348D911DCB97E000EECC20 /* bluetooth.c in Sources */,
 				11348D8E1DCB8FC400EECC20 /* battery.c in Sources */,

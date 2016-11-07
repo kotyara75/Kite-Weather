@@ -22,6 +22,7 @@ function messageFailedCallback(e) {
 
 function sendWeatherToPebble(dictionary) {
     // Send to Pebble
+    console.log('Sending to Pebble:' + JSON.stringify(dictionary));
     Pebble.sendAppMessage(dictionary, function(e) {console.log('Weather info sent to Pebble successfully.');}, messageFailedCallback);
 }
 
@@ -95,7 +96,7 @@ function updateWeatherFromBOM(pos) {
 
 function locationSuccess(pos) {
     // We will request the weather here
-    console.log('We got location:' + pos);
+    console.log('We got location:' + JSON.stringify(pos));
 
     updateWeatherFromOWM(pos);
     updateWeatherFromBOM(pos);
