@@ -13,8 +13,10 @@
 
 Layer* weather_load(Layer *parent_layer);
 void weather_unload(Window *window);
-void request_weather_update(void);
+void weather_request_update(void);
 void update_wind(const char *wind_direction, const char *wind_speed);
 void update_weather(const char *temperature, const char *conditions);
+uint32_t weather_update_interval_m(void);
+void weather_init(void);
 
 #endif /* weather_h */

@@ -8,8 +8,6 @@
 
 static Window *s_main_window = NULL;
 
-#define WEATHER_UPDATE_INTERVAL 30 //minutes
-
 static void main_window_load(Window *window) {
     // Get information about the Window
     Layer *window_layer = window_get_root_layer(window);
@@ -32,14 +30,14 @@ static void main_window_unload(Window *window) {
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     update_time(tick_time);
-    // Get weather update every 30 minutes
-    if((tick_time->tm_min % WEATHER_UPDATE_INTERVAL == 0)) {
-        request_weather_update();
+    // Get weather update if it's time to
+    if((tick_time->tm_min % weather_update_interval_m() == 0)) {
+        weather_request_update();
     }
 }
 
 static void accel_tap_handler(AccelAxisType axis, int32_t direction) {
-    request_weather_update();
+    weather_request_update();
 }
 
 static void init() {
@@ -70,6 +68,7 @@ static void init() {
     battery_init();
     bluetooth_init();
     comm_init();
+    weather_init();
 }
 
 static void deinit() {
