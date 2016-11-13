@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1129017B1DD8659600944965 /* comm.c in Sources */ = {isa = PBXBuildFile; fileRef = 112901791DD8659600944965 /* comm.c */; };
+		1129017E1DD866EB00944965 /* weather.c in Sources */ = {isa = PBXBuildFile; fileRef = 1129017C1DD866EB00944965 /* weather.c */; };
 		11348D8E1DCB8FC400EECC20 /* battery.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D8C1DCB8FC400EECC20 /* battery.c */; };
 		11348D911DCB97E000EECC20 /* bluetooth.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D8F1DCB97E000EECC20 /* bluetooth.c */; };
 		11348D941DCDF82800EECC20 /* ph_bay.c in Sources */ = {isa = PBXBuildFile; fileRef = 11348D921DCDF82800EECC20 /* ph_bay.c */; };
@@ -17,6 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		112901791DD8659600944965 /* comm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = comm.c; path = c/comm.c; sourceTree = "<group>"; };
+		1129017A1DD8659600944965 /* comm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = comm.h; path = c/comm.h; sourceTree = "<group>"; };
+		1129017C1DD866EB00944965 /* weather.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = weather.c; path = c/weather.c; sourceTree = "<group>"; };
+		1129017D1DD866EB00944965 /* weather.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = weather.h; path = c/weather.h; sourceTree = "<group>"; };
 		11348D8C1DCB8FC400EECC20 /* battery.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = battery.c; path = c/battery.c; sourceTree = "<group>"; };
 		11348D8D1DCB8FC400EECC20 /* battery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = battery.h; path = c/battery.h; sourceTree = "<group>"; };
 		11348D8F1DCB97E000EECC20 /* bluetooth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bluetooth.c; path = c/bluetooth.c; sourceTree = "<group>"; };
@@ -66,6 +72,10 @@
 				11FDAB541DC392A8001F9CE1 /* index.js */,
 				11348D981DD06E0800EECC20 /* compassPoints.js */,
 				711A13AA542A412FBD576222 /* main.c */,
+				112901791DD8659600944965 /* comm.c */,
+				1129017A1DD8659600944965 /* comm.h */,
+				1129017C1DD866EB00944965 /* weather.c */,
+				1129017D1DD866EB00944965 /* weather.h */,
 				11348D991DD0DED800EECC20 /* app_sync.c */,
 				11348D9A1DD0DED800EECC20 /* app_sync.h */,
 				11348D951DCE1C0900EECC20 /* time.c */,
@@ -155,7 +165,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1129017B1DD8659600944965 /* comm.c in Sources */,
 				11348D971DCE1C0900EECC20 /* time.c in Sources */,
+				1129017E1DD866EB00944965 /* weather.c in Sources */,
 				11348D941DCDF82800EECC20 /* ph_bay.c in Sources */,
 				11348D9B1DD0DED800EECC20 /* app_sync.c in Sources */,
 				44C15AB1ADE54CCE91DF3318 /* main.c in Sources */,

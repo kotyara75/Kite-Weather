@@ -7,6 +7,11 @@
 //
 
 #include "bluetooth.h"
+#include "comm.h"
+
+bool bluetooth_is_connected(void) {
+    return connection_service_peek_pebble_app_connection();
+}
 
 static BitmapLayer *s_bt_icon_layer = NULL;
 static GBitmap *s_bt_icon_bitmap = NULL;
@@ -16,7 +21,10 @@ static void bluetooth_callback(bool connected) {
     if(s_bt_icon_layer)
         layer_set_hidden(bitmap_layer_get_layer(s_bt_icon_layer), connected);
     
-    if(!connected) {
+    if(connected) {
+        // notify communication module to send postponed messages
+        comm_bluetooth_connected();
+    } else {
         // Issue a vibrating alert
         // vibes_double_pulse();
     }

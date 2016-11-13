@@ -11,6 +11,7 @@
 
 #include <pebble.h>
 
+bool bluetooth_is_connected(void);
 void bluetooth_init(void);
 void bluetooth_deinit(void);
 void bluetooth_load(Layer *parent_layer);
