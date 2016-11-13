@@ -92,3 +92,6 @@ int main(void) {
     app_event_loop();
     deinit();
 }
+
+// TODO: glancing to save battery: https://github.com/pebble-hacks/pebble_glancing_demo
+
