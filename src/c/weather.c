@@ -11,12 +11,17 @@
 #include "comm.h"
 
 
-#define WEATHER_LAYER_Y 1
+
 #define WEATHER_FONT_RESOURCE_ID RESOURCE_ID_FONT_PERFECT_DOS_20
+#define WEATHER_ITALIC_FONT_RESOURCE_ID RESOURCE_ID_FONT_BLUEJULY_20
+
+#define WEATHER_LAYER_Y 1
 #define WEATHER_LAYER_SIZE 21
 #define WEATER_LAYER_SHIFT 5
 
 #define WIND_FONT_RESOURCE_ID RESOURCE_ID_FONT_PERFECT_DOS_20
+#define WIND_ITALIC_FONT_RESOURCE_ID RESOURCE_ID_FONT_BLUEJULY_20
+
 #define WIND_LAYER_Y WEATHER_LAYER_Y + WEATHER_LAYER_SIZE
 #define WIND_LAYER_SIZE 20
 #define WIND_LAYER_SHIFT 45
@@ -37,6 +42,8 @@ const uint32_t wind_last_update_key = 4;
 // Globals
 static GFont s_weather_font = NULL;
 static GFont s_wind_font = NULL;
+static GFont s_weather_italic_font = NULL;
+static GFont s_wind_italic_font = NULL;
 
 static TextLayer *s_weather_layer = NULL;
 static TextLayer *s_wind_layer = NULL;
@@ -60,6 +67,7 @@ void update_wind(const char *wind_direction, const char *wind_speed) {
 
     // Display updated wind
     text_layer_set_text(s_wind_layer, wind_layer_buffer);
+    text_layer_set_font(s_wind_layer, s_wind_font);
     
     //TODO: display update time
 }
@@ -77,12 +85,14 @@ void update_weather(const char *temperature, const char *conditions) {
     
     // Display updated weather
     text_layer_set_text(s_weather_layer, weather_layer_buffer);
+    text_layer_set_font(s_weather_layer, s_weather_font);
     
     //TODO: display update time
 }
 
 void weather_request_update(void) {
-    text_layer_set_text(s_wind_layer, "...");
+    text_layer_set_font(s_weather_layer, s_weather_italic_font);
+    text_layer_set_font(s_wind_layer, s_wind_italic_font);
 
     comm_send_update_request();
 }
@@ -103,6 +113,7 @@ Layer* weather_load(Layer *parent_layer) {
     text_layer_set_text(s_weather_layer, weather_layer_buffer);
     // Create second custom font, apply it and add to Window
     s_weather_font = fonts_load_custom_font(resource_get_handle(WEATHER_FONT_RESOURCE_ID));
+    s_weather_italic_font = fonts_load_custom_font(resource_get_handle(WEATHER_ITALIC_FONT_RESOURCE_ID));
     text_layer_set_font(s_weather_layer, s_weather_font);
     layer_add_child(parent_layer, text_layer_get_layer(s_weather_layer));
     
@@ -115,6 +126,7 @@ Layer* weather_load(Layer *parent_layer) {
     text_layer_set_text(s_wind_layer, wind_layer_buffer);
     // Create second custom font, apply it and add to Window
     s_wind_font = fonts_load_custom_font(resource_get_handle(WIND_FONT_RESOURCE_ID));
+    s_wind_italic_font = fonts_load_custom_font(resource_get_handle(WIND_ITALIC_FONT_RESOURCE_ID));
     text_layer_set_font(s_wind_layer, s_wind_font);
     
     Layer * layer = text_layer_get_layer(s_wind_layer);
@@ -130,6 +142,8 @@ void weather_unload(Window *window) {
     // Unload GFont
     fonts_unload_custom_font(s_wind_font); s_wind_font = NULL;
     fonts_unload_custom_font(s_weather_font); s_weather_font = NULL;
+    fonts_unload_custom_font(s_wind_italic_font); s_wind_italic_font = NULL;
+    fonts_unload_custom_font(s_weather_italic_font); s_weather_italic_font = NULL;
 }
 
 uint32_t weather_update_interval_m(void) {

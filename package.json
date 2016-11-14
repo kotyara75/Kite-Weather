@@ -17,6 +17,11 @@
         "projectType": "native",
         "resources": {
             "media": [
+          {
+          "type": "font",
+          "name": "FONT_BLUEJULY_20",
+          "file": "fonts/bluejuly.ttf"
+          },
 		  {
 		    "type": "font",
 		    "name": "FONT_PERFECT_DOS_42",
